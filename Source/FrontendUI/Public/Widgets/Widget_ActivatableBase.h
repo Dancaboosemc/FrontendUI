@@ -6,6 +6,7 @@
 #include "CommonActivatableWidget.h"
 #include "Widget_ActivatableBase.generated.h"
 
+class AFrontendPlayerController;
 /**
  * 
  */
@@ -14,4 +15,12 @@ class FRONTENDUI_API UWidget_ActivatableBase : public UCommonActivatableWidget
 {
 	GENERATED_BODY()
 	
+private:
+
+	TWeakObjectPtr<AFrontendPlayerController> CachedOwningFrontendPC;
+
+protected:
+
+	UFUNCTION(BlueprintPure)
+	AFrontendPlayerController* GetOwningFrontendPlayerController();
 };
