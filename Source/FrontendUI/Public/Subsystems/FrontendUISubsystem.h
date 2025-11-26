@@ -8,6 +8,7 @@
 
 class UWidget_PrimaryLayout;
 class UWidget_ActivatableBase;
+class UFrontendCommonButtonBase;
 
 struct FGameplayTag;
 
@@ -16,6 +17,9 @@ enum class EAsyncPushWidgetState : uint8
 	OnCreatedBeforePush,
 	AfterPush
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnButtonDescriptionTextUpdatedDelegate, UFrontendCommonButtonBase*, BroadcastingButton, FText, DescriptionText);
+
 /**
  * 
  */
@@ -36,6 +40,9 @@ public:
 
 	void PushSoftWidgetToStackAsync(const FGameplayTag& InWidgetStackTag, TSoftClassPtr<UWidget_ActivatableBase> InSoftWidgetClass, 
 		TFunction<void(EAsyncPushWidgetState, UWidget_ActivatableBase*)> AsyncPushedStateCallback);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnButtonDescriptionTextUpdatedDelegate OnButtonDescriptionTextUpdated;
 
 private:
 
