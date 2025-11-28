@@ -56,15 +56,28 @@ void UFrontendUISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InWidg
 
 				UCommonActivatableWidgetContainerBase* FoundWidgetStack = CreatedPrimaryLayout->FindWidgetStackByTag(InWidgetStackTag);
 
-				UWidget_ActivatableBase* CreatedWidget =  FoundWidgetStack->AddWidget<UWidget_ActivatableBase>(
-					LoadedWidgetClass,
-					[AsyncPushedStateCallback](UWidget_ActivatableBase& CreatedWidgetInstance)
-					{
-						AsyncPushedStateCallback(EAsyncPushWidgetState::OnCreatedBeforePush, &CreatedWidgetInstance);
-					}
-				);
+				bool found = false;
+				for (UCommonActivatableWidget* Widget : FoundWidgetStack->GetWidgetList())
+				{
+					if (Widget->GetClass() == LoadedWidgetClass)
+						found = true;
+				}
 
-				AsyncPushedStateCallback(EAsyncPushWidgetState::AfterPush, CreatedWidget);
+				if (!found)
+				{
+					UWidget_ActivatableBase* CreatedWidget = FoundWidgetStack->AddWidget<UWidget_ActivatableBase>(
+						LoadedWidgetClass,
+						[AsyncPushedStateCallback](UWidget_ActivatableBase& CreatedWidgetInstance)
+						{
+							AsyncPushedStateCallback(EAsyncPushWidgetState::OnCreatedBeforePush, &CreatedWidgetInstance);
+						}
+					);
+
+					FString TestMsg = FString::Printf(TEXT("Number of widgets in stack: %d, New Widget: %s"), FoundWidgetStack->GetNumWidgets(), *CreatedWidget->GetName());
+					Debug::Print(TestMsg);
+
+					AsyncPushedStateCallback(EAsyncPushWidgetState::AfterPush, CreatedWidget);
+				}
 			}
 		)
 	);
