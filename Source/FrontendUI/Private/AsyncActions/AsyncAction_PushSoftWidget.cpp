@@ -21,7 +21,6 @@ UAsyncAction_PushSoftWidget* UAsyncAction_PushSoftWidget::PushSoftWidget(const U
 			Node->bCachedFocusOnNewlyPushedWidget = bFocusOnNewlyPushedWidget;
 			Node->RegisterWithGameInstance(World);
 
-			Node->Activate();
 			return Node;
 		}
 	}
